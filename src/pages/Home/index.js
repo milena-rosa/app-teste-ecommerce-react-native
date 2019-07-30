@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { FlatList } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import api from '../../services/api';
+import * as CartActions from '../../store/modules/cart/actions';
 
 import { formatPrice } from '../../util/format';
 import {
@@ -32,29 +34,28 @@ class Home extends Component {
     this.setState({ products: data });
   }
 
-  handleAddProduct = product => {
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'ADD_TO_CART',
-      product,
-    });
+  handleAddProduct = id => {
+    const { addToCartRequest } = this.props;
+    addToCartRequest(id);
   };
 
-  renderProduct = ({ item }) => (
-    <Product key={item.id}>
-      <ProductImage source={{ uri: item.image }} />
-      <ProductTitle>{item.title}</ProductTitle>
-      <ProductPrice>{item.formattedPrice}</ProductPrice>
-      <AddButton onPress={() => this.handleAddProduct(item)}>
-        <ProductAmount>
-          <Icon name="add-shopping-cart" color="#fff" size={20} />
-          <ProductAmountText>0</ProductAmountText>
-        </ProductAmount>
-        <AddButtonText>Adicionar</AddButtonText>
-      </AddButton>
-    </Product>
-  );
+  renderProduct = ({ item }) => {
+    const { amount } = this.props;
+    return (
+      <Product key={item.id}>
+        <ProductImage source={{ uri: item.image }} />
+        <ProductTitle>{item.title}</ProductTitle>
+        <ProductPrice>{item.formattedPrice}</ProductPrice>
+        <AddButton onPress={() => this.handleAddProduct(item.id)}>
+          <ProductAmount>
+            <Icon name="add-shopping-cart" color="#fff" size={20} />
+            <ProductAmountText>{amount[item.id] || 0}</ProductAmountText>
+          </ProductAmount>
+          <AddButtonText>Adicionar</AddButtonText>
+        </AddButton>
+      </Product>
+    );
+  };
 
   render() {
     const { products } = this.state;
@@ -72,4 +73,17 @@ class Home extends Component {
   }
 }
 
-export default connect()(Home);
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+    return amount;
+  }, {}),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

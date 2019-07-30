@@ -2,11 +2,14 @@ import styled from 'styled-components/native';
 
 import colors from '../../styles/colors';
 
-export const Container = styled.View`
+export const CartContainer = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
   margin: 15px;
   padding: 10px;
   border-radius: 4px;
   background: #fff;
+  max-height: 600px;
 `;
 
 export const Products = styled.View``;
@@ -41,6 +44,14 @@ export const ProductDelete = styled.TouchableOpacity`
   padding: 6px;
 `;
 
+export const ProductControls = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  background: #eee;
+`;
+
 export const ProductControlButton = styled.TouchableOpacity``;
 
 export const ProductAmount = styled.TextInput.attrs({
@@ -52,6 +63,7 @@ export const ProductAmount = styled.TextInput.attrs({
   border-radius: 4px;
   min-width: 52px;
   background: #fff;
+  text-align: center;
 `;
 
 export const ProductSubtotal = styled.Text`
@@ -62,7 +74,7 @@ export const ProductSubtotal = styled.Text`
 `;
 
 export const TotalContainer = styled.View`
-  margin-top: 30px;
+  margin: 30px 0;
 `;
 
 export const TotalText = styled.Text`
@@ -71,8 +83,8 @@ export const TotalText = styled.Text`
   text-align: center;
 `;
 
-export const TotalAmount = styled.Text`
-  margin: 0 5px 0 30 px;
+export const TotalPrice = styled.Text`
+  margin: 5px 0 30px 0;
   font-size: 32px;
   font-weight: bold;
   text-align: center;

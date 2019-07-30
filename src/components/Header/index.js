@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 
 import { HeaderContainer, Logo, Cart, ProductAmount } from './styles';
 
-function Header({ cartSize }) {
+function Header({ cartSize, navigation }) {
   return (
     <HeaderContainer>
       <Logo />
-      <Cart onPress={() => {}}>
+      <Cart onPress={() => navigation.navigate('Cart')}>
         <Icon name="shopping-basket" color="#fff" size={24} />
         <ProductAmount>{cartSize}</ProductAmount>
       </Cart>
